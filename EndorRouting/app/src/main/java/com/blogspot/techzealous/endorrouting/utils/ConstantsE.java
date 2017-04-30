@@ -14,6 +14,11 @@ import java.util.Comparator;
 public class ConstantsE {
 
     private static final String TAG = "ConstantsE";
+    /** The smallest planet movement that we are going to consider as existing. Everything less than that
+     * we consider as not existing.
+     * We can adjust this to be as small of a value as we want or need to - meters, ...
+     */
+    private static final int CLOSE_ENOUGH_KM = 1;
 
     private ConstantsE() {
         super();
@@ -68,7 +73,7 @@ public class ConstantsE {
             Log.i(TAG, "while, distanceTraveledByPlanetKm=" + distanceTraveledByPlanetKm +
                     ", planetB.getDegrees=" + aPlanetTo.getDegrees());
             Log.i(TAG, "while, angleRadians=" + angleRadians + ", angleDegrees=" + angleDegrees);
-            if((int)distanceTraveledByPlanetKm < 1) {
+            if((int)distanceTraveledByPlanetKm < CLOSE_ENOUGH_KM) {
                 closeEnought = true;
                 intercepted = true;
                 Log.i(TAG, "closeEnough, distanceTraveledByPlanetKm=" + distanceTraveledByPlanetKm);
@@ -128,6 +133,8 @@ public class ConstantsE {
         int r1r2 = aPlanetFrom.getDistanceFromCenter() * aPlanetTo.getDistanceFromCenter();
         double cos21 = Math.cos((aPlanetTo.getDegrees() - aPlanetFrom.getDegrees()) * (Math.PI / 180));
         distance = Math.sqrt((sqrR1 + sqrR2) - 2 * r1r2 * cos21);
+        //if we are travelling from an outer planet to an inner the distance will come as negative, but we always want it
+        //as positive number.
         return Math.abs(distance);
     }
 
