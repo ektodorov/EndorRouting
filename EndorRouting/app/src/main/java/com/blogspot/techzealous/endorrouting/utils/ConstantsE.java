@@ -1,7 +1,5 @@
 package com.blogspot.techzealous.endorrouting.utils;
 
-import android.util.Log;
-
 import com.blogspot.techzealous.endorrouting.objects.Planet;
 import com.blogspot.techzealous.endorrouting.objects.Ply;
 import com.blogspot.techzealous.endorrouting.objects.Route;
@@ -14,7 +12,9 @@ import java.util.Comparator;
 public class ConstantsE {
 
     private static final String TAG = "ConstantsE";
-    /** The smallest planet movement that we are going to consider as existing. Everything less than that
+
+    /**
+     * The smallest planet movement that we are going to consider as existing. Everything less than that
      * we consider as not existing.
      * We can adjust this to be as small of a value as we want or need to - meters, ...
      */
@@ -31,7 +31,6 @@ public class ConstantsE {
     public static Route getDistance(SpaceShip aShip, Planet aPlanetFrom, Planet aPlanetTo) {
         Route route = new Route();
 
-        // (pi/180) * degrees - convert degrees to radians
         //arc length s = (pi/180) * angleDegrees * r
         //arc length s = 2 * p * r * (angle / 360)
         double distanceKm = 0;
@@ -39,7 +38,7 @@ public class ConstantsE {
         float angleRadians = 0;
         float angleDegrees = 0;
         float initialDegrees = aPlanetTo.getDegrees() + 360;
-        boolean closeEnought = false;
+        boolean closeEnough = false;
         boolean intercepted = false;
         double distanceKmShortes = Double.MAX_VALUE;
 
@@ -49,11 +48,7 @@ public class ConstantsE {
         // angle = (s/r) / (pi/180)
         angleRadians = (float)(distanceTraveledByPlanetKm / aPlanetTo.getDistanceFromCenter());
         angleDegrees = (float)(angleRadians * (180 / Math.PI));
-        Log.i(TAG, "distanceKm=" + distanceKm + ", tripHours=" + tripHours);
-        Log.i(TAG, "planetB.getSpeedKmH=" + aPlanetTo.getSpeedKmH());
-        Log.i(TAG, "distanceTraveledByPlanetKm=" + distanceTraveledByPlanetKm);
-        Log.i(TAG, "angleRadians=" + angleRadians + ", angleDegrees=" + angleDegrees);
-        while(!closeEnought) {
+        while(!closeEnough) {
             aPlanetTo.setDegrees(aPlanetTo.getDegrees() + angleDegrees);
             if(aPlanetTo.getDegrees() > 360) {
                 aPlanetTo.setDegrees(aPlanetTo.getDegrees() - 360);
@@ -64,23 +59,17 @@ public class ConstantsE {
             if(distanceKm < distanceKmShortes) {distanceKmShortes = distanceKm;}
 
             distanceTraveledByPlanetKm = aPlanetTo.getSpeedKmH() * tripHours;
-            // (pi/180) * degrees - convert degrees to radians
-            //arc length s = angleDegrees * r
+            // arc length s = angleDegrees * r
             // angle = (s/r) * (180 / PI)
             angleRadians = (float)(distanceTraveledByPlanetKm / aPlanetTo.getDistanceFromCenter());
             angleDegrees = (float)(angleRadians * (180 / Math.PI));
 
-            Log.i(TAG, "while, distanceTraveledByPlanetKm=" + distanceTraveledByPlanetKm +
-                    ", planetB.getDegrees=" + aPlanetTo.getDegrees());
-            Log.i(TAG, "while, angleRadians=" + angleRadians + ", angleDegrees=" + angleDegrees);
             if((int)distanceTraveledByPlanetKm < CLOSE_ENOUGH_KM) {
-                closeEnought = true;
+                closeEnough = true;
                 intercepted = true;
-                Log.i(TAG, "closeEnough, distanceTraveledByPlanetKm=" + distanceTraveledByPlanetKm);
-                Log.i(TAG, "closeEnough, angleRadians=" + angleRadians + ", angleDegrees=" + angleDegrees);
             }
             if(aPlanetTo.getDegrees() > initialDegrees) {
-                closeEnought = true;
+                closeEnough = true;
             }
         }
 
@@ -91,8 +80,6 @@ public class ConstantsE {
             }
             distanceKm = ConstantsE.getDistance(aPlanetFrom, aPlanetTo);
             tripHours = distanceKm / aShip.getShipVelocity();
-            Log.i(TAG, "final intercepted, distanceKm=" + distanceKm + ", tripHours=" + tripHours);
-            Log.i(TAG, "final intercepted, planetB.getDegrees=" + aPlanetTo.getDegrees());
         } else {
             //The combination of ship speed, distance from sun, speed of planet is such that we cannot
             //catch/intercept the planet by going after/towards it so we just have to use the shortest path
@@ -114,8 +101,6 @@ public class ConstantsE {
             travelDistance = 2 * Math.PI * aPlanetTo.getDistanceFromCenter() * (travelDegrees / 360);
             travelTimeHours = travelDistance / aPlanetTo.getSpeedKmH();
             tripHours = travelTimeHours;
-            Log.i(TAG, "final not intercepted, distanceKm=" + distanceKm + ", tripHours=" + tripHours);
-            Log.i(TAG, "final not intercepted, planetB.getDegrees=" + aPlanetTo.getDegrees());
         }
         route.setDistance(distanceKm);
         route.setTimeHours(tripHours);
@@ -125,7 +110,7 @@ public class ConstantsE {
         return route;
     }
 
-    /** Calculates the distance between two planets. */
+    /** Calculates the distance between two planets using Law of Cosines. */
     public static double getDistance(Planet aPlanetFrom, Planet aPlanetTo) {
         double distance = 0;
         int sqrR1 = aPlanetFrom.getDistanceFromCenter() * aPlanetFrom.getDistanceFromCenter();
