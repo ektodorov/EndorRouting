@@ -1,0 +1,54 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context="com.blogspot.techzealous.endorrouting.fragments.AddPlanetFragment">
+
+    <EditText
+        android:id="@+id/editTextNameAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/editTextSpeedAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Speed - days per orbit"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editTextStartDegreesAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Start degrees"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editTextDistanceFromCenterAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Distance from center"
+        android:inputType="numberDecimal"/>
+
+    <Button
+        android:id="@+id/buttonAddPlanetAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_planet"/>
+
+    <Button
+        android:id="@+id/buttonDeletePlanetAddPlanet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_planet"/>
+
+</LinearLayout>

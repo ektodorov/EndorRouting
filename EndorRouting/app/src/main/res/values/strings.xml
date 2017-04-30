@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">EndorRouting</string>
+    <string name="add_planet">Add Planet</string>
+    <string name="update_planet">Update Planet</string>
+    <string name="show_system">Show System</string>
+    <string name="show_route">Show Route</string>
+    <string name="more">More</string>
+    <string name="msg_nothing_here">Nothing here!</string>
+    <string name="clear">Clear</string>
+    <string name="delete_planet">Delete Planet</string>
+    <string name="day">Day:</string>
+</resources>
