@@ -90,7 +90,7 @@ public class SolarSystemActivity extends AppCompatActivity {
 
                 strongThis.mCanvas.drawColor(mColorBackground);
                 strongThis.mPaint.setColor(Color.YELLOW);
-                strongThis.mCanvas.drawCircle(strongThis.mSystemOrigin, strongThis.mSystemOrigin, 3, strongThis.mPaint);
+                strongThis.mCanvas.drawCircle(strongThis.mSystemOrigin, strongThis.mSystemOrigin, 5, strongThis.mPaint);
 
                 strongThis.mPaint.setColor(Color.GREEN);
                 int count = strongThis.mArrayPlanets.size();
@@ -104,7 +104,7 @@ public class SolarSystemActivity extends AppCompatActivity {
 
                     int posX = (int)(strongThis.mSystemOrigin + radius * Math.cos(Math.toRadians(degrees)));
                     int posY = (int)(strongThis.mSystemOrigin + radius * Math.sin(Math.toRadians(degrees)));
-                    strongThis.mCanvas.drawCircle(posX, posY, 3, strongThis.mPaint);
+                    strongThis.mCanvas.drawCircle(posX, posY, 5, strongThis.mPaint);
                 }
 
                 mHandlerMain.post(new Runnable() {
