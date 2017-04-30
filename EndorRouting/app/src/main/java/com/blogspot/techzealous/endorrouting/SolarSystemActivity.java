@@ -38,7 +38,7 @@ public class SolarSystemActivity extends AppCompatActivity {
     private int mSystemWidth;
     private int mSystemOrigin;
     private int mColorBackground;
-    private int mDistanceBiggest;
+    private int mDistanceBiggest = 1;
     /** Scale the solar system planet distance from center according the screen width. */
     private float mStep;
 
