@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.blogspot.techzealous.endorrouting.fragments.AddPlanetFragment;
 import com.blogspot.techzealous.endorrouting.objects.Planet;
+import com.blogspot.techzealous.endorrouting.utils.ConstantsE;
 import com.blogspot.techzealous.endorrouting.utils.SharedState;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mButtonShowSystem;
     private Button mButtonShowRoute;
     private Button mButtonClear;
+    private EditText mEditTextShipVelocity;
+    private EditText mEditTextLaunchDay;
     private ListView mListViewPlanets;
 
     private ListAdapterPlanets mListAdapterPlanets;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         mButtonShowSystem = (Button)findViewById(R.id.buttonShowSystemMain);
         mButtonShowRoute = (Button)findViewById(R.id.buttonShowRouteMain);
         mButtonClear = (Button)findViewById(R.id.buttonClearMain);
+        mEditTextShipVelocity = (EditText)findViewById(R.id.editTextShipVelocityMain);
+        mEditTextLaunchDay = (EditText)findViewById(R.id.editTextLaunchDayMain);
         mListViewPlanets = (ListView)findViewById(R.id.listViewPlanetsMain);
 
         ActionBar actionBar = getSupportActionBar();
@@ -64,7 +70,20 @@ public class MainActivity extends AppCompatActivity {
         mButtonShowRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String strVelocity = mEditTextShipVelocity.getText().toString();
+                String strLaunchDay = mEditTextLaunchDay.getText().toString();
+                int velocity = ConstantsE.SHIP_VELOCITY;
+                int launchDay = ConstantsE.LAUNCH_DAY;
+                try {
+                    velocity = Integer.parseInt(strVelocity);
+                    launchDay = Integer.parseInt(strLaunchDay);
+                } catch(NumberFormatException ex) {
+                    //do nothing
+                }
+
                 Intent i = new Intent(MainActivity.this, RouteActivity.class);
+                i.putExtra(ConstantsE.EXTRA_SHIP_VELOCITY, velocity);
+                i.putExtra(ConstantsE.EXTRA_LAUNCH_DAY, launchDay);
                 startActivity(i);
             }
         });

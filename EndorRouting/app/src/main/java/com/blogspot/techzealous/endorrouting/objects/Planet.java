@@ -17,7 +17,7 @@ public class Planet {
     private int mMinutesInAYear;
     private float mDegreesAHour;
     private float mDegreesAMinute;
-    private double mSpeedKmH = -1;
+    private double mSpeedKmDay = -1;
     private float mDegrees;
 
     public Planet() {
@@ -43,13 +43,12 @@ public class Planet {
         mDegreesAMinute = 360.0f / mMinutesInAYear;
     }
 
-    /** Days to orbit */
-    public double getSpeedKmH() {
-        if(mSpeedKmH < 0) {
+    public double getSpeedKmDay() {
+        if(mSpeedKmDay < 0) {
             double orbitCircumference = 2 * Math.PI * mDistanceFromCenter;
-            mSpeedKmH = orbitCircumference / (mSpeed * 24);
+            mSpeedKmDay = orbitCircumference / mSpeed;
         }
-        return mSpeedKmH;
+        return mSpeedKmDay;
     }
 
     public float getStartDegrees() {return mStartDegrees;}
@@ -109,7 +108,7 @@ public class Planet {
         if (mMinutesInAYear != planet.mMinutesInAYear) return false;
         if (Float.compare(planet.mDegreesAHour, mDegreesAHour) != 0) return false;
         if (Float.compare(planet.mDegreesAMinute, mDegreesAMinute) != 0) return false;
-        if (Double.compare(planet.mSpeedKmH, mSpeedKmH) != 0) return false;
+        if (Double.compare(planet.mSpeedKmDay, mSpeedKmDay) != 0) return false;
         if (Float.compare(planet.mDegrees, mDegrees) != 0) return false;
         return mName != null ? mName.equals(planet.mName) : planet.mName == null;
 
@@ -127,7 +126,7 @@ public class Planet {
         result = 31 * result + mMinutesInAYear;
         result = 31 * result + (mDegreesAHour != +0.0f ? Float.floatToIntBits(mDegreesAHour) : 0);
         result = 31 * result + (mDegreesAMinute != +0.0f ? Float.floatToIntBits(mDegreesAMinute) : 0);
-        temp = Double.doubleToLongBits(mSpeedKmH);
+        temp = Double.doubleToLongBits(mSpeedKmDay);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (mDegrees != +0.0f ? Float.floatToIntBits(mDegrees) : 0);
         return result;

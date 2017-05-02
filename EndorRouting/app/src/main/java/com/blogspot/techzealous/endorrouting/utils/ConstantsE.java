@@ -3,7 +3,6 @@ package com.blogspot.techzealous.endorrouting.utils;
 import com.blogspot.techzealous.endorrouting.objects.Planet;
 import com.blogspot.techzealous.endorrouting.objects.Ply;
 import com.blogspot.techzealous.endorrouting.objects.Route;
-import com.blogspot.techzealous.endorrouting.objects.SpaceShip;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +19,11 @@ public class ConstantsE {
      */
     private static final int CLOSE_ENOUGH_KM = 1;
 
+    public static final String EXTRA_SHIP_VELOCITY = "shipvelocity";
+    public static final String EXTRA_LAUNCH_DAY = "launchday";
+    public static final int SHIP_VELOCITY = 10;
+    public static final int LAUNCH_DAY = 0;
+
     private ConstantsE() {
         super();
     }
@@ -28,13 +32,13 @@ public class ConstantsE {
      * Calculates the distance between two planets taking into account the movement of the planet we are travelling to
      * while we travel to it.
      */
-    public static Route getDistance(SpaceShip aShip, Planet aPlanetFrom, Planet aPlanetTo) {
+    public static Route getDistance(int aShipVelocity, Planet aPlanetFrom, Planet aPlanetTo) {
         Route route = new Route();
 
         //arc length s = (pi/180) * angleDegrees * r
         //arc length s = 2 * p * r * (angle / 360)
         double distanceKm = 0;
-        double tripHours = 0;
+        double tripDays = 0;
         float angleRadians = 0;
         float angleDegrees = 0;
         float initialDegrees = aPlanetTo.getDegrees() + 360;
@@ -43,8 +47,8 @@ public class ConstantsE {
         double distanceKmShortes = Double.MAX_VALUE;
 
         distanceKm = ConstantsE.getDistance(aPlanetFrom, aPlanetTo);
-        tripHours = distanceKm / aShip.getShipVelocity();
-        double distanceTraveledByPlanetKm = aPlanetTo.getSpeedKmH() * tripHours;
+        tripDays = distanceKm / aShipVelocity;
+        double distanceTraveledByPlanetKm = aPlanetTo.getSpeedKmDay() * tripDays;
         // angle = (s/r) / (pi/180)
         angleRadians = (float)(distanceTraveledByPlanetKm / aPlanetTo.getDistanceFromCenter());
         angleDegrees = (float)(angleRadians * (180 / Math.PI));
@@ -55,10 +59,10 @@ public class ConstantsE {
                 initialDegrees = initialDegrees - 360;
             }
             distanceKm = ConstantsE.getDistance(aPlanetFrom, aPlanetTo);
-            tripHours = distanceKm / aShip.getShipVelocity();
+            tripDays = distanceKm / aShipVelocity;
             if(distanceKm < distanceKmShortes) {distanceKmShortes = distanceKm;}
 
-            distanceTraveledByPlanetKm = aPlanetTo.getSpeedKmH() * tripHours;
+            distanceTraveledByPlanetKm = aPlanetTo.getSpeedKmDay() * tripDays;
             // arc length s = angleDegrees * r
             // angle = (s/r) * (180 / PI)
             angleRadians = (float)(distanceTraveledByPlanetKm / aPlanetTo.getDistanceFromCenter());
@@ -79,7 +83,7 @@ public class ConstantsE {
                 aPlanetTo.setDegrees(aPlanetTo.getDegrees() - 360);
             }
             distanceKm = ConstantsE.getDistance(aPlanetFrom, aPlanetTo);
-            tripHours = distanceKm / aShip.getShipVelocity();
+            tripDays = distanceKm / aShipVelocity;
         } else {
             //The combination of ship speed, distance from sun, speed of planet is such that we cannot
             //catch/intercept the planet by going after/towards it so we just have to use the shortest path
@@ -99,11 +103,11 @@ public class ConstantsE {
             }
             //arc length s = 2 * p * r * (angle / 360)
             travelDistance = 2 * Math.PI * aPlanetTo.getDistanceFromCenter() * (travelDegrees / 360);
-            travelTimeHours = travelDistance / aPlanetTo.getSpeedKmH();
-            tripHours = travelTimeHours;
+            travelTimeHours = travelDistance / aPlanetTo.getSpeedKmDay();
+            tripDays = travelTimeHours;
         }
         route.setDistance(distanceKm);
-        route.setTimeHours(tripHours);
+        route.setTimeHours(tripDays);
         route.setPlanetFrom(aPlanetFrom);
         route.setPlanetTo(aPlanetTo);
 
@@ -166,7 +170,7 @@ public class ConstantsE {
      * Visits the planets in order starting from the innermost and going outwards,
      * taking into account the movement of the planets while we travel.
      */
-    public static ArrayList<Route> getRouteInOrder(ArrayList<Planet> aArrayPlanets, SpaceShip aShip) {
+    public static ArrayList<Route> getRouteInOrder(ArrayList<Planet> aArrayPlanets, int aShipVelocity) {
         Collections.sort(aArrayPlanets, new Comparator<Planet>() {
             @Override
             public int compare(Planet planet1, Planet planet2) {
@@ -191,7 +195,7 @@ public class ConstantsE {
             Planet planet = aArrayPlanets.get(x);
             planet.setDegrees(planet.getPosition((float)timeHours));
 
-            Route route = getDistance(aShip, planetCurrent, planet);
+            Route route = getDistance(aShipVelocity, planetCurrent, planet);
             arrayRoute.add(route);
             timeHours = timeHours + route.getTimeHours();
 
@@ -204,7 +208,7 @@ public class ConstantsE {
     /**
      * Traverses the planets in the order they are passed in, taking into account the movement of the planets while we travel.
      */
-    public static ArrayList<Route> getRoute(ArrayList<Planet> aArrayPlanets, SpaceShip aShip) {
+    public static ArrayList<Route> getRoute(ArrayList<Planet> aArrayPlanets, int aShipVelocity) {
         ArrayList<Route> arrayRoute = new ArrayList<Route>();
         int count = aArrayPlanets.size();
         Planet planetCurrent = null;
@@ -217,7 +221,7 @@ public class ConstantsE {
             Planet planet = aArrayPlanets.get(x);
             planet.setDegrees(planet.getPosition((float)timeHours));
 
-            Route route = getDistance(aShip, planetCurrent, planet);
+            Route route = getDistance(aShipVelocity, planetCurrent, planet);
             arrayRoute.add(route);
             timeHours = timeHours + route.getTimeHours();
 
@@ -228,7 +232,7 @@ public class ConstantsE {
     }
 
     /** Creates a route with Minimax, starting from the innermost planet. */
-    public static ArrayList<Route> getRouteMinimax(ArrayList<Planet> aArrayPlanets, SpaceShip aShip, int aLaunchDay) {
+    public static ArrayList<Route> getRouteMinimax(ArrayList<Planet> aArrayPlanets, int aShipVelocity, int aLaunchDay) {
         Collections.sort(aArrayPlanets, new Comparator<Planet>() {
             @Override
             public int compare(Planet planet1, Planet planet2) {
@@ -257,9 +261,9 @@ public class ConstantsE {
         Ply ply = new Ply();
         ply.setPlanets(SharedState.clonePlanets(aArrayPlanets));
         ply.setPlanet(ply.getPlanets().remove(0));
-        ply.setShip(aShip);
+        ply.setShipVelocity(aShipVelocity);
         ArrayList<Planet> arrayPlanets = ply.traverse();
-        arrayRoute = getRoute(arrayPlanets, aShip);
+        arrayRoute = getRoute(arrayPlanets, aShipVelocity);
 
         return arrayRoute;
     }

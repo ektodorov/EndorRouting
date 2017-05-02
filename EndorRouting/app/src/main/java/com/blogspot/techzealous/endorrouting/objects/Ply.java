@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Ply {
 
-    private SpaceShip mShip;
+    private int mShipVelocity;
     private Ply mParentPly;
     private Ply mChildPly;
     /** The current planet we are on at this ply. */
@@ -24,8 +24,8 @@ public class Ply {
     private double mScore = Double.MAX_VALUE;
     private double mDistance;
 
-    public SpaceShip getShip() {return mShip;}
-    public void setShip(SpaceShip aShip) {mShip = aShip;}
+    public int getShipVelocity() {return mShipVelocity;}
+    public void setShipVelocity(int aShipVelocity) {mShipVelocity = aShipVelocity;}
 
     public Ply getParent() {return mParentPly;}
     public void setParent(Ply aParent) {mParentPly = aParent;}
@@ -46,7 +46,7 @@ public class Ply {
         ArrayList<Planet> arrayPlanets = new ArrayList<>();
 
         if(mParentPly != null) {
-            Route route = ConstantsE.getDistance(mShip, mParentPly.getPlanet(), mPlanet);
+            Route route = ConstantsE.getDistance(mShipVelocity, mParentPly.getPlanet(), mPlanet);
             mDistance = route.getDistance() + mParentPly.getDistance();
         }
 
@@ -61,7 +61,7 @@ public class Ply {
             ply.setParent(this);
             ply.setPlanets(SharedState.clonePlanets(mArrayPlanets));
             ply.setPlanet(ply.getPlanets().remove(x));
-            ply.setShip(mShip);
+            ply.setShipVelocity(mShipVelocity);
             ArrayList<Planet> planets = ply.traverse();
             if(ply.getScore() < mScore) {
                 mScore = ply.getScore();
@@ -87,9 +87,9 @@ public class Ply {
 
         Ply ply = (Ply) o;
 
+        if (mShipVelocity != ply.mShipVelocity) return false;
         if (Double.compare(ply.mScore, mScore) != 0) return false;
         if (Double.compare(ply.mDistance, mDistance) != 0) return false;
-        if (mShip != null ? !mShip.equals(ply.mShip) : ply.mShip != null) return false;
         if (mParentPly != null ? !mParentPly.equals(ply.mParentPly) : ply.mParentPly != null)
             return false;
         if (mChildPly != null ? !mChildPly.equals(ply.mChildPly) : ply.mChildPly != null)
@@ -103,7 +103,7 @@ public class Ply {
     public int hashCode() {
         int result;
         long temp;
-        result = mShip != null ? mShip.hashCode() : 0;
+        result = mShipVelocity;
         result = 31 * result + (mParentPly != null ? mParentPly.hashCode() : 0);
         result = 31 * result + (mChildPly != null ? mChildPly.hashCode() : 0);
         result = 31 * result + (mPlanet != null ? mPlanet.hashCode() : 0);

@@ -48,9 +48,46 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/textViewShipVelocityMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutButtons"
+        android:textColor="@android:color/black"
+        android:text="@string/label_ship_velocity"/>
+
+    <EditText
+        android:id="@+id/editTextShipVelocityMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewShipVelocityMain"
+        android:hint="@string/label_ship_velocity"
+        android:ems="10"
+        android:inputType="number"
+        android:text="10"/>
+
+    <TextView
+        android:id="@+id/textViewLaunchDayMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextShipVelocityMain"
+        android:textColor="@android:color/black"
+        android:paddingTop="8dp"
+        android:text="@string/label_launch_day"/>
+
+    <EditText
+        android:id="@+id/editTextLaunchDayMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLaunchDayMain"
+        android:hint="@string/label_launch_day"
+        android:ems="10"
+        android:inputType="number"
+        android:text="0"/>
+
     <ListView
         android:id="@+id/listViewPlanetsMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/linearLayoutButtons"/>
+        android:layout_below="@id/editTextLaunchDayMain"/>
 </RelativeLayout>

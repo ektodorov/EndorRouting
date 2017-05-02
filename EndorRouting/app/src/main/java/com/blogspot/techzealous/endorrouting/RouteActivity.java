@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.blogspot.techzealous.endorrouting.objects.Planet;
 import com.blogspot.techzealous.endorrouting.objects.Route;
-import com.blogspot.techzealous.endorrouting.objects.SpaceShip;
 import com.blogspot.techzealous.endorrouting.utils.ConstantsE;
 import com.blogspot.techzealous.endorrouting.utils.SharedState;
 
@@ -31,7 +30,8 @@ public class RouteActivity extends AppCompatActivity {
     private ListAdapterRoute mListAdapter;
     private Handler mHandlerMain;
     private ExecutorService mExecutorService;
-    private volatile boolean mIsDestroyed;
+    private int mShipVelocity;
+    private int mLaunchDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,9 @@ public class RouteActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {actionBar.hide();}
 
+        mShipVelocity = getIntent().getIntExtra(ConstantsE.EXTRA_SHIP_VELOCITY, ConstantsE.SHIP_VELOCITY);
+        mLaunchDay = getIntent().getIntExtra(ConstantsE.EXTRA_LAUNCH_DAY, ConstantsE.LAUNCH_DAY);
+
         mHandlerMain = new Handler(Looper.getMainLooper());
         mExecutorService = Executors.newSingleThreadExecutor();
         mArrayRoute = new ArrayList<Route>();
@@ -54,14 +57,13 @@ public class RouteActivity extends AppCompatActivity {
         mExecutorService.execute(new Runnable() {
             @Override
             public void run() {
-                SpaceShip ship = new SpaceShip();
-                ship.setShipVelocity(10);
-//                ArrayList<Route> arrayRoute = ConstantsE.getRouteInOrder(fArrayPlanets);
-//                ArrayList<Route> arrayRoute = ConstantsE.getRouteInOrder(fArrayPlanets, ship);
-                ArrayList<Route> arrayRoute = ConstantsE.getRouteMinimax(fArrayPlanets, ship, 0);
-
                 RouteActivity strongActivity = weakActivity.get();
                 if(strongActivity == null) {return;}
+
+//                ArrayList<Route> arrayRoute = ConstantsE.getRouteInOrder(fArrayPlanets);
+//                ArrayList<Route> arrayRoute = ConstantsE.getRouteInOrder(fArrayPlanets, ship);
+                ArrayList<Route> arrayRoute = ConstantsE.getRouteMinimax(fArrayPlanets,
+                        strongActivity.mShipVelocity, strongActivity.mLaunchDay);
 
                 strongActivity.mArrayRoute = arrayRoute;
 
@@ -76,7 +78,7 @@ public class RouteActivity extends AppCompatActivity {
                         strongActivity.mProgressBar.setVisibility(View.GONE);
                         strongActivity.mTextViewTotal.setText("Total Distance:"
                             + String.valueOf(Route.getTotalDistance(strongActivity.mArrayRoute)) + " km\n"
-                            + "Total time:" + Route.getTotalTime(strongActivity.mArrayRoute) + " hours");
+                            + "Total time:" + Route.getTotalTime(strongActivity.mArrayRoute) + " days");
                     }
                 });
             }
@@ -91,11 +93,5 @@ public class RouteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mIsDestroyed = true;
-        super.onDestroy();
     }
 }

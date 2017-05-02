@@ -9,4 +9,6 @@
     <string name="clear">Clear</string>
     <string name="delete_planet">Delete Planet</string>
     <string name="day">Day:</string>
+    <string name="label_ship_velocity">Ship velocity (km/day)</string>
+    <string name="label_launch_day">Launch day</string>
 </resources>
