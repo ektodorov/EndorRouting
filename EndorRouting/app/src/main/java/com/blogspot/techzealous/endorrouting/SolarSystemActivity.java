@@ -115,7 +115,7 @@ public class SolarSystemActivity extends AppCompatActivity {
 
                         strongThis.mTimeQuarterDay++;
                         strongThis.mImageView.setImageBitmap(strongThis.mBitmap);
-                        strongThis.mTextView.setText(String.valueOf(mTimeQuarterDay / 4));
+                        strongThis.mTextView.setText(String.valueOf(strongThis.mTimeQuarterDay / 4));
                     }
                 });
             }
